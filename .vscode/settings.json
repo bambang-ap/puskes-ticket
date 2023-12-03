@@ -1,0 +1,45 @@
+{
+	"cSpell.words": [
+		"Penjualan",
+	],
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"eslint.validate": [
+		"javascriptreact"
+	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"editor.formatOnSave": true,
+	"eslint.enable": true,
+	"prettier.configPath": ".prettierrc.js",
+	"eslint.nodePath": ".eslintrc.js",
+	"eslint.onIgnoredFiles": "off",
+	"prettier.trailingComma": "es5",
+	"files.eol": "\n",
+	"tailwindCSS.experimental.classRegex": [
+		[
+			"classNames\\(([^)]*)\\)",
+			"'([^']*)'",
+			"\"([^\"]*)\""
+		]
+	],
+	"tailwindCSS.classAttributes": [
+		"className",
+		"className\\w+",
+		"\\w+ClassName"
+	],
+	"inlineFold.maskChar": "◦◦◦"
+}

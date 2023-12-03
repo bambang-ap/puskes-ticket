@@ -1,0 +1,7 @@
+# .estlintignore file
+dist
+.next
+build
+node_modules
+schema.sql
+schemaServer.sql
