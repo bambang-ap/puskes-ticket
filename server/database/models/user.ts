@@ -9,10 +9,7 @@ import {
 
 import {TUser} from '@appTypes/app.zod';
 import {Tables} from '@server';
-import {
-	defaultExcludeColumn,
-	defaultOrderBy,
-} from '@server-utils/sequelize/const';
+import {defaultExcludeColumn, defaultOrderBy} from '@server-utils';
 
 export class dUser extends Model<TUser> {
 	static _alias = 'dataUser' as const;

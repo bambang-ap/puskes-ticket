@@ -4,7 +4,7 @@ import * as momentTz from 'moment-timezone';
 import objectPath from 'object-path';
 import {FieldPath, FieldValues} from 'react-hook-form';
 
-import {ModalTypeSelect} from '@appTypes/app.zod';
+import {nikRegex} from '@appTypes/app.zod';
 import {
 	defaultErrorMutation,
 	formatDateStringView,
@@ -12,6 +12,7 @@ import {
 	formatFullView,
 	formatHour,
 } from '@constants';
+import {Gender} from '@enum';
 import {useLoader} from '@hooks';
 import {UseTRPCMutationOptions} from '@trpc/react-query/shared';
 
@@ -45,19 +46,29 @@ export function typingCallback(callback: () => void, timeout = 500) {
 	typingTimer = setTimeout(callback, timeout);
 }
 
+export function getBirthFromNik(nik: string, gender?: Gender) {
+	const matches = nik.match(nikRegex);
+
+	if (!matches) return null;
+	const [, , date, month, year] = matches;
+	return `${parseInt(year!) > 50 ? '19' : '20'}${year}-${month}-${
+		gender === Gender.Female ? parseInt(date!) - 40 : date
+	}`;
+}
+
 export function numberFormat(
 	qty: number,
 	currency = true,
 	minimumFractionDigits = 0,
 	maximumFractionDigits = 0,
 ) {
-	const formated = new Intl.NumberFormat('id-ID', {
+	const formatted = new Intl.NumberFormat('id-ID', {
 		minimumFractionDigits,
 		maximumFractionDigits,
 		...(currency ? {style: 'currency', currency: 'IDR'} : {}),
 	}).format(qty);
 
-	return formated;
+	return formatted;
 }
 
 export function generateId(id?: string) {
@@ -85,40 +96,6 @@ export function atLeastOneDefined(
 	obj: Record<string | number | symbol, unknown>,
 ) {
 	return Object.values(obj).some(v => v !== undefined);
-}
-
-export function modalTypeParser(type?: ModalTypeSelect, pageName = '') {
-	const isAdd = type === 'add';
-	const isEdit = type === 'edit';
-	const isPreview = type === 'preview';
-	const isDelete = type === 'delete';
-	const isSelect = type === 'select';
-	const isOther = type === 'other';
-	const isPreviewEdit = isEdit || isPreview;
-
-	return {
-		isEdit,
-		isPreview,
-		isAdd,
-		isOther,
-		isDelete,
-		isSelect,
-		isPreviewEdit,
-		get modalTitle() {
-			switch (type) {
-				case 'add':
-					return `Tambah ${pageName}`;
-				case 'edit':
-					return `Ubah ${pageName}`;
-				case 'preview':
-					return `Detail ${pageName}`;
-				case 'delete':
-					return `Hapus ${pageName}`;
-				default:
-					return '';
-			}
-		},
-	};
 }
 
 export function toBase64(

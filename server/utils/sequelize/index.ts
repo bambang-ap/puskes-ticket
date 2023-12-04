@@ -3,8 +3,10 @@ import {DECIMAL, literal, Sequelize} from 'sequelize';
 import {defaultExcludeColumn, defaultOrderBy} from './const';
 
 export * from './attribute';
+export * from './const';
 export * from './relation';
 export * from './where';
+export * from './zod';
 
 export function defaultScope(sequelize: Sequelize, withOrder = true) {
 	return {

@@ -1,6 +1,8 @@
 import {Breakpoint, TextFieldProps} from '@mui/material';
 import {QueryObserverOptions} from '@tanstack/react-query';
 
+import {SelectPropsData} from '@components';
+import {Gender} from '@enum';
 import {TRPCClientError} from '@trpc/client';
 import {AppRouter} from '@trpc/routers';
 
@@ -24,6 +26,11 @@ export const formatFull = `${formatDate} - ${formatHour}`;
 export const formatDateView = 'DD/MM/YYYY';
 export const formatDateStringView = 'D MMMM YYYY';
 export const formatFullView = `${formatDateView} - ${formatHour}`;
+
+export const SelectionGender: SelectPropsData<Gender>[] = [
+	{value: Gender.Male},
+	{value: Gender.Female},
+];
 
 export const queryClientConfig: QueryObserverOptions = {
 	refetchIntervalInBackground: false,

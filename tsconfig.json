@@ -52,8 +52,8 @@
 			"@db-utils": [
 				"./server/database/utils"
 			],
-			"@server-utils/*": [
-				"./server/utils/*"
+			"@server-utils": [
+				"./server/utils"
 			],
 			"@appTypes/*": [
 				"./src/appTypes/*"

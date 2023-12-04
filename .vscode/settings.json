@@ -1,6 +1,8 @@
 {
 	"cSpell.words": [
+		"Cust",
 		"Penjualan",
+		"upsert"
 	],
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"

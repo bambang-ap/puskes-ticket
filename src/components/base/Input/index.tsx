@@ -107,6 +107,7 @@ export function InputComponent<F extends FieldValues>(
 		case 'date': {
 			return (
 				<div
+					key={value}
 					className={classNames(
 						'relative pt-2',
 						{'cursor-pointer': !isDisabled},

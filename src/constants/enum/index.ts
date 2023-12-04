@@ -1,4 +1,4 @@
-export enum SheetNames {
-	Product = 'Product',
-	Category = 'Category',
+export enum Gender {
+	Male = 'Laki-Laki',
+	Female = 'Perempuan',
 }

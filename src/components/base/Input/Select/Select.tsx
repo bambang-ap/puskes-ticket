@@ -7,6 +7,7 @@ import {Icon} from '@baseComps/Icon';
 
 import {FieldPath, FieldValues} from 'react-hook-form';
 
+import {Text} from '@baseComps/Text';
 import {defaultTextFieldProps} from '@constants';
 import {
 	ControlledComponentProps,
@@ -111,6 +112,7 @@ function SelectComponent<F extends FieldValues>({
 	const tick = useTicker(isLoading, 5);
 
 	const {
+		fieldState,
 		field: {value, onChange, name},
 	} = controller;
 
@@ -129,6 +131,13 @@ function SelectComponent<F extends FieldValues>({
 				.map(() => '.')
 				.join('')}`;
 
+	const errorMessage = fieldState.error?.message && (
+		<Text className="text-red-700 flex items-center">
+			<Icon name="faWarning" className="mr-2 text-red-700" />
+			{fieldState.error?.message}
+		</Text>
+	);
+
 	if (isDisabled) {
 		return (
 			<InputComponent
@@ -144,6 +153,7 @@ function SelectComponent<F extends FieldValues>({
 
 	return (
 		<div
+			key={value}
 			className={classNames(
 				'pt-2',
 				{'cursor-not-allowed': isDisabled},
@@ -185,33 +195,37 @@ function SelectComponent<F extends FieldValues>({
 					} = params;
 
 					return (
-						<TextField
-							{...params}
-							{...defaultTextFieldProps}
-							label={label}
-							placeholder={firstOption}
-							sx={{
-								'& .MuiInputBase-input.Mui-disabled': {
-									WebkitTextFillColor: '#000000',
-								},
-							}}
-							InputProps={{
-								...params.InputProps,
-								endAdornment: (
-									<>
-										{rightAcc}
-										{endAdornment}
-									</>
-								),
-								startAdornment: (
-									<>
-										{startAdornment}
-										{leftAcc}
-									</>
-								),
-								classes: {input: 'focus:bg-yellow'},
-							}}
-						/>
+						<>
+							<TextField
+								{...params}
+								{...defaultTextFieldProps}
+								label={label}
+								placeholder={firstOption}
+								error={!!errorMessage}
+								sx={{
+									'& .MuiInputBase-input.Mui-disabled': {
+										WebkitTextFillColor: '#000000',
+									},
+								}}
+								InputProps={{
+									...params.InputProps,
+									endAdornment: (
+										<>
+											{rightAcc}
+											{endAdornment}
+										</>
+									),
+									startAdornment: (
+										<>
+											{startAdornment}
+											{leftAcc}
+										</>
+									),
+									classes: {input: 'focus:bg-yellow'},
+								}}
+							/>
+							{errorMessage}
+						</>
 					);
 				}}
 			/>
