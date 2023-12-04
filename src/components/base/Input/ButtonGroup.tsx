@@ -30,7 +30,6 @@ function SelectComponent<T, F extends FieldValues>({
 	data = [],
 	disabled,
 	controller,
-	className,
 	renderItem,
 }: ControlledComponentProps<F, HH<T>>) {
 	const formContext = useContext(FormContext);

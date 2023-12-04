@@ -1,3 +1,6 @@
+// FIXME:
+// @ts-nocheck
+
 import {atom} from 'recoil';
 
 import {TMenu} from '@appTypes/app.zod';

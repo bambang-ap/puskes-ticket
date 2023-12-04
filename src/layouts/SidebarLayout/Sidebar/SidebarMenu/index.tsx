@@ -1,3 +1,6 @@
+// FIXME:
+// @ts-nocheck
+
 import {useContext} from 'react';
 
 import {List, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';

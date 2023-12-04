@@ -1,14 +1,6 @@
 import type {ReactElement} from 'react';
 
-import {
-	Box,
-	Button,
-	Card,
-	Container,
-	OutlinedInput,
-	styled,
-	Typography,
-} from '@mui/material';
+import {Box, Button, Card, Container, styled, Typography} from '@mui/material';
 import Head from 'next/head';
 
 import {BaseLayout} from '@layouts';
@@ -33,17 +25,17 @@ const TopWrapper = styled(Box)(
 `,
 );
 
-const OutlinedInputWrapper = styled(OutlinedInput)(
-	({theme}) => `
-    background-color: ${theme.colors.alpha.white[100]};
-`,
-);
+// const OutlinedInputWrapper = styled(OutlinedInput)(
+// 	({theme}) => `
+//     background-color: ${theme.colors.alpha.white[100]};
+// `,
+// );
 
-const ButtonSearch = styled(Button)(
-	({theme}) => `
-    margin-right: -${theme.spacing(1)};
-`,
-);
+// const ButtonSearch = styled(Button)(
+// 	({theme}) => `
+//     margin-right: -${theme.spacing(1)};
+// `,
+// );
 
 function Status404() {
 	return (

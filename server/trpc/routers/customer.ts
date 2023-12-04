@@ -9,7 +9,6 @@ export default function customerRouters() {
 		upsert: procedure.input(tCustomerUpsert).mutation(async ({input}) => {
 			const {registerNumber, id} = input;
 
-			console.log(373845, input);
 			await dCust.upsert({
 				...input,
 				id: id ?? generateId('C-'),
