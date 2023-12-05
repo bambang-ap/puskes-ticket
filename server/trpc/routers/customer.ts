@@ -14,7 +14,10 @@ export default function customerRouters() {
 				const {count, rows} = await dCust.findAndCountAll({
 					limit,
 					offset: (page - 1) * limit,
-					where: sqlWhereLike<TCustomer>(['name', 'nik'], search),
+					where: sqlWhereLike<TCustomer>(
+						['name', 'nik', 'registerNumber'],
+						search,
+					),
 				});
 
 				return pagingResult(

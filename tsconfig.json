@@ -55,6 +55,9 @@
 			"@server-utils": [
 				"./server/utils"
 			],
+			"@signal": [
+				"./src/signal"
+			],
 			"@appTypes/*": [
 				"./src/appTypes/*"
 			],

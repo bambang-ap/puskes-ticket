@@ -20,6 +20,7 @@ export type ModalRef = {
 	hide: (callback?: () => Promise<void>) => void;
 };
 export type ModalProps = {
+	fullScreen?: boolean;
 	className?: string;
 	disableBackdropClick?: boolean;
 	children: ReactNode;
@@ -38,6 +39,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 		className,
 		children,
 		title,
+		fullScreen,
 		disableBackdropClick = false,
 		onVisibleChange,
 		renderFooter,
@@ -78,8 +80,9 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 		<Dialog
 			fullWidth
 			open={visible}
-			fullScreen={isMobile}
+			fullScreen={typeof fullScreen !== undefined ? fullScreen : isMobile}
 			maxWidth={modalSize}
+			className="bg-transparent"
 			onClose={() => {
 				if (!disableBackdropClick) hide();
 			}}>

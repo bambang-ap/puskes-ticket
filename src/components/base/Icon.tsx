@@ -11,6 +11,9 @@ import {classNames} from '@utils';
 type IconName = Exclude<keyof typeof svgIcon, 'prefix' | 'fas'>;
 
 export type IconProps = {
+	/**
+	 * https://fontawesome.com/v5/search
+	 */
 	name?: LiteralUnion<IconName>;
 	className?: string;
 	onClick?: NoopVoid;

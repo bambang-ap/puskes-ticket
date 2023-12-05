@@ -1,12 +1,21 @@
 import {useEffect} from 'react';
 
 import {Pagination} from '@mui/material';
+import {filterExpand} from '@signal';
 import {useForm, UseFormReturn} from 'react-hook-form';
 import {useRecoilValue} from 'recoil';
 
 import {PagingResult} from '@appTypes/app.type';
 import {TableFormValue} from '@appTypes/app.zod';
-import {Button, Cells, Input, Select, Table, TableProps} from '@components';
+import {
+	Button,
+	Cells,
+	Icon,
+	Input,
+	Select,
+	Table,
+	TableProps,
+} from '@components';
 import {dataPerPageSelection} from '@constants';
 import {atomIsMobile} from '@recoil/atoms';
 import {classNames} from '@utils';
@@ -29,6 +38,7 @@ export function TableFilter<T>({
 	...props
 }: TableFilterProps<T>) {
 	const isMobile = useRecoilValue(atomIsMobile);
+	const expanded = filterExpand.value;
 
 	const {control, watch, reset: resetForm} = form;
 	const {rows = [], totalPage: pageCount = 1, page = 1} = data ?? {};
@@ -46,6 +56,41 @@ export function TableFilter<T>({
 	const doSearch = handleSubmit(({search}) => {
 		resetForm(prev => ({...prev, search}));
 	});
+
+	const expandTopComponent = (
+		<>
+			<div
+				className={classNames('flex gap-2', {
+					'flex-col': isMobile,
+					'w-1/2': !isMobile,
+				})}>
+				<Select
+					className={classNames({['flex-1']: disableSearch})}
+					disableClear
+					topSelected={false}
+					label="Data per halaman"
+					data={dataPerPageSelection}
+					control={control}
+					fieldName="limit"
+				/>
+				{!disableSearch && (
+					<form onSubmit={doSearch} className="flex-1">
+						<Input
+							label="Pencarian"
+							fieldName="search"
+							control={searchControl}
+							rightAcc={
+								<div className="flex gap-2">
+									{searching && <Button icon="faClose" onClick={clearSearch} />}
+									<Button icon="faSearch" onClick={doSearch} />
+								</div>
+							}
+						/>
+					</form>
+				)}
+			</div>
+		</>
+	);
 
 	function clearSearch() {
 		reset({search: ''});
@@ -73,39 +118,20 @@ export function TableFilter<T>({
 					className={classNames('px-2 gap-2 flex justify-between', {
 						'flex-col': isMobile,
 					})}>
-					<div className="flex items-center gap-2">{topComponent}</div>
 					<div
 						className={classNames('flex gap-2', {
 							'flex-col': isMobile,
-							'w-1/2': !isMobile,
+							'items-center': !isMobile,
 						})}>
-						<Select
-							className={classNames({['flex-1']: disableSearch})}
-							disableClear
-							topSelected={false}
-							label="Data per halaman"
-							data={dataPerPageSelection}
-							control={control}
-							fieldName="limit"
-						/>
-						{!disableSearch && (
-							<form onSubmit={doSearch} className="flex-1">
-								<Input
-									label="Pencarian"
-									fieldName="search"
-									control={searchControl}
-									rightAcc={
-										<div className="flex gap-2">
-											{searching && (
-												<Button icon="faClose" onClick={clearSearch} />
-											)}
-											<Button icon="faSearch" onClick={doSearch} />
-										</div>
-									}
-								/>
-							</form>
+						{topComponent}
+						{isMobile && (
+							<Button onClick={() => filterExpand.toggle()}>
+								<Icon name="faFilter" />
+								<Icon name={expanded ? 'faChevronUp' : 'faChevronDown'} />
+							</Button>
 						)}
 					</div>
+					{!isMobile ? expandTopComponent : expanded && expandTopComponent}
 				</div>
 			}
 			bottomComponent={

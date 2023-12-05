@@ -2,7 +2,7 @@ import classnames from 'clsx';
 import clone from 'just-clone';
 import * as momentTz from 'moment-timezone';
 import objectPath from 'object-path';
-import {FieldPath, FieldValues} from 'react-hook-form';
+import {DeepPartialSkipArrayKey, FieldPath, FieldValues} from 'react-hook-form';
 import * as XLSX from 'xlsx';
 
 import {ModalTypeSelect, nikRegex} from '@appTypes/app.zod';
@@ -15,7 +15,7 @@ import {
 	formatHour,
 } from '@constants';
 import {Gender} from '@enum';
-import {useLoader} from '@hooks';
+import {Fields, useLoader} from '@hooks';
 import {
 	UseTRPCMutationOptions,
 	UseTRPCQueryResult,
@@ -236,6 +236,15 @@ export function renderItemAsIs<T extends {}>(item: T) {
 	}, {});
 }
 
+export function getIds<
+	F extends Fields,
+	KK extends DeepPartialSkipArrayKey<F>,
+	P extends keyof KK,
+>(dataForm: KK, property?: P) {
+	const selectedIds = !!property ? transformIds(dataForm[property]) : [];
+	return {selectedIds, property, enabled: selectedIds.length > 0};
+}
+
 export function transformIds(dataObj?: MyObject<undefined | boolean>) {
 	const selectedIds = Object.entries(dataObj ?? {}).reduce<string[]>(
 		(ret, [id, val]) => {
@@ -246,4 +255,18 @@ export function transformIds(dataObj?: MyObject<undefined | boolean>) {
 	);
 
 	return selectedIds;
+}
+
+export function formParser<
+	F extends Fields,
+	KK extends DeepPartialSkipArrayKey<F>,
+	P extends keyof KK,
+>(dataForm: KK, opts?: {property?: P; pageName?: string}) {
+	const {pageName, property} = opts ?? {};
+	const {mType, ...restDataForm} = dataForm;
+
+	const ids = getIds(dataForm, property);
+	const modal = modalTypeParser(mType, pageName);
+
+	return {...ids, ...modal, dataForm: restDataForm};
 }

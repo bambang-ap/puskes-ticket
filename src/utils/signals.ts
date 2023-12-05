@@ -18,6 +18,16 @@ export class CreateSignal<T> {
 	}
 }
 
+export class CreateSignalBoolean extends CreateSignal<boolean> {
+	constructor(initialValue = false) {
+		super(initialValue);
+	}
+
+	toggle() {
+		this.set(p => !p);
+	}
+}
+
 export class CreateSignalArray<T> extends CreateSignal<T[]> {
 	constructor(initialValue: T[]) {
 		super(initialValue);

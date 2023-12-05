@@ -32,7 +32,10 @@ import {
 
 type PrintData = (id: string) => void;
 type G<F extends FieldValues> = Pick<CellSelectProps<F>, 'fieldName'>;
-export type Fields = {type: ModalTypeSelect} & FieldValues;
+export type Fields<F extends FieldValues = FieldValues> = F & {
+	mType: ModalTypeSelect;
+};
+// export type Fields = {modalType: ModalTypeSelect} & FieldValues;
 export type TableFilterProps<T, F extends Fields> = Omit<
 	TableProps<
 		T,
@@ -117,7 +120,7 @@ export function useTableFilterComponent<
 		exportUseQuery,
 	);
 
-	const {isSelect} = modalTypeParser(dataForm.type);
+	const {isSelect} = modalTypeParser(dataForm.mType);
 	const selectedIds = hasProp ? transformIds(dataForm[property]) : [];
 	const enabledPdf = !!genPdfOptions;
 
@@ -132,7 +135,7 @@ export function useTableFilterComponent<
 	) : (
 		<>
 			{hasProp && (
-				<Button onClick={() => reset(prev => ({...prev, type: 'select'}))}>
+				<Button onClick={() => reset(prev => ({...prev, mType: 'select'}))}>
 					Select
 				</Button>
 			)}
@@ -141,7 +144,7 @@ export function useTableFilterComponent<
 	);
 
 	function onCancel() {
-		if (hasProp) reset(prev => ({...prev, type: undefined, [property]: {}}));
+		if (hasProp) reset(prev => ({...prev, mType: undefined, [property]: {}}));
 	}
 
 	async function printData(idOrAll: true | string): Promise<any> {
@@ -162,7 +165,7 @@ export function useTableFilterComponent<
 		await genPdfRef.current?.generate();
 		afterPrint?.();
 		loader?.hide?.();
-		reset(prev => ({...prev, type: undefined}));
+		reset(prev => ({...prev, mType: undefined}));
 	}
 
 	function CellSelect(cellProps: G<F>) {
