@@ -12,15 +12,8 @@ import {FormProps} from '@appTypes/props.type';
 import {Select, selectMapper} from '@components';
 import {trpc} from '@utils/trpc';
 
-export function StateSelection<F extends FieldValues>(
-	props: FormProps<TState & F, 'control' | 'resetField'>,
-) {
-	const control = props.control as unknown as Control<TState>;
-	const resetField = props.resetField as unknown as UseFormResetField<TState>;
-
-	const {provinceId, regencyId, districtId} = useWatch<TState>({
-		control,
-	});
+export function useStateData(ids: Partial<TState>) {
+	const {provinceId, regencyId, districtId} = ids;
 
 	const {data: provinces = []} = trpc.state.provinces.useQuery();
 	const {data: regencies = []} = trpc.state.regencies.useQuery(
@@ -35,6 +28,25 @@ export function StateSelection<F extends FieldValues>(
 		{id: districtId!},
 		{enabled: !!districtId},
 	);
+
+	return {provinces, regencies, districts, villages};
+}
+
+export function StateSelection<F extends FieldValues>(
+	props: FormProps<TState & F, 'control' | 'resetField'>,
+) {
+	const control = props.control as unknown as Control<TState>;
+	const resetField = props.resetField as unknown as UseFormResetField<TState>;
+
+	const {provinceId, regencyId, districtId} = useWatch<TState>({
+		control,
+	});
+
+	const {districts, provinces, regencies, villages} = useStateData({
+		provinceId,
+		regencyId,
+		districtId,
+	});
 
 	useEffect(() => {
 		if (!provinceId) resetField('regencyId');

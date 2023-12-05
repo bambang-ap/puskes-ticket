@@ -5,17 +5,19 @@ import PropTypes from 'prop-types';
 import {Scrollbars} from 'react-custom-scrollbars-2';
 
 interface ScrollbarProps {
+	height?: string;
 	className?: string;
 	children?: ReactNode;
 }
 
-const Scrollbar: FC<ScrollbarProps> = ({children, ...rest}) => {
+const Scrollbar: FC<ScrollbarProps> = ({children, height, ...rest}) => {
 	const theme = useTheme();
 
 	return (
 		<Scrollbars
 			autoHide
 			universal
+			height={height}
 			renderThumbVertical={() => {
 				return (
 					<Box

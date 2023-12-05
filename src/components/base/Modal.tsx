@@ -7,9 +7,12 @@ import {
 	DialogProps,
 	DialogTitle,
 } from '@mui/material';
+import {useRecoilValue} from 'recoil';
+
+import {atomIsMobile} from '@recoil/atoms';
+import {classNames} from '@utils';
 
 import {Icon} from './Icon';
-import {Text} from './Text';
 
 export type ModalRef = {
 	visible: boolean;
@@ -17,6 +20,7 @@ export type ModalRef = {
 	hide: (callback?: () => Promise<void>) => void;
 };
 export type ModalProps = {
+	className?: string;
 	disableBackdropClick?: boolean;
 	children: ReactNode;
 	title?: string;
@@ -31,6 +35,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 	ref,
 ) {
 	const {
+		className,
 		children,
 		title,
 		disableBackdropClick = false,
@@ -39,6 +44,8 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 		visible: initVisible = false,
 		size: modalSize,
 	} = props;
+	const isMobile = useRecoilValue(atomIsMobile);
+
 	const [visible, setVisible] = useState(initVisible);
 
 	const {hide, show}: Omit<ModalRef, 'visible'> = {
@@ -71,6 +78,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 		<Dialog
 			fullWidth
 			open={visible}
+			fullScreen={isMobile}
 			maxWidth={modalSize}
 			onClose={() => {
 				if (!disableBackdropClick) hide();
@@ -78,16 +86,23 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 			{title && (
 				<DialogTitle>
 					<div className="flex justify-between items-center">
-						<Text>{title}</Text>
-						<Icon
-							name="faClose"
-							onClick={() => hide()}
-							className="text-black text-lg cursor-pointer"
-						/>
+						<h3
+							className={classNames('text-xl text-center', {
+								'flex-1': disableBackdropClick,
+							})}>
+							{title}
+						</h3>
+						{!disableBackdropClick && (
+							<Icon
+								name="faClose"
+								onClick={() => hide()}
+								className="text-black text-lg cursor-pointer"
+							/>
+						)}
 					</div>
 				</DialogTitle>
 			)}
-			<DialogContent>{children}</DialogContent>
+			<DialogContent className={className}>{children}</DialogContent>
 			{renderFooter && <DialogActions>{renderFooter()}</DialogActions>}
 		</Dialog>
 	);

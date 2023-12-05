@@ -1,20 +1,36 @@
 import {tCustomerUpsert} from '@appTypes/app.zod';
-import {dCust} from '@db';
-import {Success} from '@server-utils';
+import {dCust, ORM} from '@db';
+import {PError, PSuccess} from '@server-utils';
 import {procedure, router} from '@trpc';
 import {generateId} from '@utils';
 
 export default function customerRouters() {
 	return router({
-		upsert: procedure.input(tCustomerUpsert).mutation(async ({input}) => {
-			const {registerNumber, id} = input;
+		create: procedure.input(tCustomerUpsert).mutation(async ({input}) => {
+			const transaction = await ORM.transaction();
 
-			await dCust.upsert({
-				...input,
-				id: id ?? generateId('C-'),
-				registerNumber: registerNumber ?? generateId(),
-			});
-			return Success;
+			try {
+				const {registerNumber, id} = input;
+
+				const createdUser = await dCust.create(
+					{
+						...input,
+						id: id ?? generateId('C-'),
+						registerNumber: registerNumber ?? generateId(),
+					},
+					{transaction},
+				);
+
+				await transaction.commit();
+				return PSuccess(createdUser.toJSON());
+			} catch (err) {
+				await transaction.rollback();
+				throw new PError(
+					err,
+					'BAD_REQUEST',
+					'NIK has been used, please contact the admin',
+				);
+			}
 		}),
 	});
 }

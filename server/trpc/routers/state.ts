@@ -1,4 +1,4 @@
-import {TProvince, zId} from '@appTypes/app.zod';
+import {TDistrict, TProvince, TRegency, TVillage, zId} from '@appTypes/app.zod';
 import {procedure, router} from '@trpc';
 
 export default function stateRouters() {
@@ -12,17 +12,17 @@ export default function stateRouters() {
 
 		regencies: procedure.input(zId).query(async ({input: {id}}) => {
 			const data = await fetch(`${url}/regencies/${id}.json`);
-			return data.json() as unknown as TProvince[];
+			return data.json() as unknown as TRegency[];
 		}),
 
 		districts: procedure.input(zId).query(async ({input: {id}}) => {
 			const data = await fetch(`${url}/districts/${id}.json`);
-			return data.json() as unknown as TProvince[];
+			return data.json() as unknown as TDistrict[];
 		}),
 
 		villages: procedure.input(zId).query(async ({input: {id}}) => {
 			const data = await fetch(`${url}/villages/${id}.json`);
-			return data.json() as unknown as TProvince[];
+			return data.json() as unknown as TVillage[];
 		}),
 	});
 }
