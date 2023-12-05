@@ -16,7 +16,7 @@ import {useRecoilState} from 'recoil';
 
 import {SidebarContext} from '@app/contexts/SidebarContext';
 import {Text} from '@components';
-import {SidebarCollapseOn} from '@constants';
+import {manifest, SidebarCollapseOn} from '@constants';
 import {atomHeaderTitle} from '@recoil/atoms';
 import {classNames} from '@utils';
 
@@ -50,7 +50,7 @@ function Header() {
 	return (
 		<>
 			<Head>
-				<title>{classNames('IMI Inventory', {[`- ${title}`]: !!title})}</title>
+				<title>{classNames(manifest.name, {[`- ${title}`]: !!title})}</title>
 			</Head>
 			<HeaderWrapper
 				display="flex"

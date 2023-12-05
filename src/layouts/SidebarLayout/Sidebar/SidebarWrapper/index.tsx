@@ -15,7 +15,7 @@ import {signOut} from 'next-auth/react';
 
 import {SidebarContext} from '@app/contexts/SidebarContext';
 import {Icon, Text} from '@components';
-import {SidebarCollapseOn} from '@constants';
+import {manifest, SidebarCollapseOn} from '@constants';
 import Scrollbar from '@prevComp/Scrollbar';
 
 import SidebarMenu from '../SidebarMenu';
@@ -43,7 +43,7 @@ function RenderSidebar() {
 				<Box mt={3}>
 					<Box mx={2}>
 						<div className="flex rounded-lg flex-col gap-2 p-4">
-							<Text>Inventory PT. IMI</Text>
+							<Text>{manifest.name}</Text>
 							<div className="flex items-center gap-2">
 								<Icon name="faUserCircle" className="text-3xl" />
 

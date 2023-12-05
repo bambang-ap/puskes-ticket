@@ -1,3 +1,5 @@
+import {jsPDFOptions} from 'jspdf';
+
 export type {
 	AppRouter,
 	AppRouterCaller,
@@ -12,4 +14,12 @@ export type PagingResult<T> = {
 	page: number;
 	totalPage: number;
 	limit: number;
+};
+
+export type PaperSize = [height: number, width: number];
+
+export type GenPdfOpts = {
+	filename?: string;
+	paperSize?: PaperSize;
+	orientation?: jsPDFOptions['orientation'];
 };

@@ -1,22 +1,19 @@
 import Link from 'next/link';
 
 import {Button} from '@components';
-import {getLayout} from '@layouts';
+import {getAdminLayout} from '@layouts';
 
-Index.getLayout = getLayout;
+AdminIndex.getLayout = getAdminLayout;
 
-export default function Index() {
+export default function AdminIndex() {
 	return (
 		<div className="flex flex-col gap-2 p-4">
 			<div>Ini adalah halaman utama</div>
 			<div>Untuk detail tampilan awal, bisa diskusi terlebih dahulu</div>
 
 			<div className="flex gap-2">
-				<Link href="/registration">
-					<Button variant="outlined">Registrasi Mandiri</Button>
-				</Link>
-				<Link href="/admin">
-					<Button variant="outlined">Halaman Admin</Button>
+				<Link href="/admin/customer">
+					<Button variant="outlined">List Customer</Button>
 				</Link>
 			</div>
 		</div>

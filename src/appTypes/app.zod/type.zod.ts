@@ -5,7 +5,10 @@ import {Gender} from '@enum';
 export const nikRegex = /^(\d{6})(\d{2})(\d{2})(\d{2})(\d{4})/;
 export const dateRegex = /^(\d{4})-(\d{2})-(\d{2})/;
 
+export type ZDate = z.infer<typeof zDate>;
 export const zDate = z.string().regex(dateRegex);
+
+export type ZId = z.infer<typeof zId>;
 export const zId = z.object({id: z.string()});
 
 export type TUser = z.infer<typeof tUser>;

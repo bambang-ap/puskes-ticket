@@ -1,6 +1,7 @@
+// FIXME:
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getServerSession} from 'next-auth';
-import {authOptions} from 'pages/api/auth/[...nextauth]';
 
 import {PagingResult} from '@appTypes/app.type';
 import {TSession} from '@appTypes/app.zod';
@@ -10,17 +11,22 @@ import {moment} from '@utils';
 export {generateId} from '@utils';
 export * from './enum';
 
-export const getSession = async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.headers['user-agent']?.toLowerCase()?.includes('postman')) {
-		return {
-			session: {user: "{role: 'admin'}"} as TSession,
-			hasSession: true,
-		};
-	}
+export const getSession = async (
+	_req: NextApiRequest,
+	_res: NextApiResponse,
+) => {
+	return {hasSession: true, session: {expires: '', user: {}} as TSession};
 
-	const session = (await getServerSession(req, res, authOptions)) as TSession;
+	// if (req.headers['user-agent']?.toLowerCase()?.includes('postman')) {
+	// 	return {
+	// 		session: {user: "{role: 'admin'}"} as TSession,
+	// 		hasSession: true,
+	// 	};
+	// }
 
-	return {session, hasSession: !!session};
+	// const session = (await getServerSession(_req, _res, authOptions)) as TSession;
+
+	// return {session, hasSession: !!session};
 };
 
 export const Response = <T extends object>(res: NextApiResponse) => {

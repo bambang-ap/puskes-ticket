@@ -1,10 +1,27 @@
 import {Breakpoint, TextFieldProps} from '@mui/material';
 import {QueryObserverOptions} from '@tanstack/react-query';
 
+import {PaperSize} from '@appTypes/app.type';
 import {SelectPropsData} from '@components';
 import {Gender} from '@enum';
 import {TRPCClientError} from '@trpc/client';
 import {AppRouter} from '@trpc/routers';
+
+import manifest from '../../public/manifest.json';
+
+export {manifest};
+
+export const defaultLimit = 10;
+
+export const paperA4: PaperSize = [210, 297];
+
+export const dataPerPageSelection: SelectPropsData<number>[] = [
+	{value: 5},
+	{value: 10},
+	{value: 20},
+	{value: 30},
+	{value: 50},
+];
 
 export const SidebarCollapseOn: Breakpoint = 'sm';
 export const isProd = process.env.NODE_ENV === 'production';

@@ -3,10 +3,12 @@ import clone from 'just-clone';
 import * as momentTz from 'moment-timezone';
 import objectPath from 'object-path';
 import {FieldPath, FieldValues} from 'react-hook-form';
+import * as XLSX from 'xlsx';
 
-import {nikRegex} from '@appTypes/app.zod';
+import {ModalTypeSelect, nikRegex} from '@appTypes/app.zod';
 import {
 	defaultErrorMutation,
+	formatDate,
 	formatDateStringView,
 	formatDateView,
 	formatFullView,
@@ -14,13 +16,16 @@ import {
 } from '@constants';
 import {Gender} from '@enum';
 import {useLoader} from '@hooks';
-import {UseTRPCMutationOptions} from '@trpc/react-query/shared';
+import {
+	UseTRPCMutationOptions,
+	UseTRPCQueryResult,
+} from '@trpc/react-query/shared';
 
 let typingTimer: NodeJS.Timeout;
 
 momentTz.tz.setDefault('Asia/Jakarta');
 
-function convertDate(format: string, date?: LiteralUnion<'now'>) {
+function convertDate(format: string, date?: LiteralUnion<'now'> | number) {
 	const isNow = date === 'now';
 
 	if (!isNow && !date) return null;
@@ -29,11 +34,15 @@ function convertDate(format: string, date?: LiteralUnion<'now'>) {
 }
 
 export const dateUtils = {
-	date: (date?: LiteralUnion<'now'>) => convertDate(formatDateView, date),
-	hour: (date?: LiteralUnion<'now'>) => convertDate(formatHour, date),
-	dateS: (date?: LiteralUnion<'now'>) =>
+	date: (date?: LiteralUnion<'now'> | number) =>
+		convertDate(formatDateView, date),
+	readable: (date?: LiteralUnion<'now'> | number) =>
+		convertDate(formatDate, date),
+	hour: (date?: LiteralUnion<'now'> | number) => convertDate(formatHour, date),
+	dateS: (date?: LiteralUnion<'now'> | number) =>
 		convertDate(formatDateStringView, date),
-	full: (date?: LiteralUnion<'now'>) => convertDate(formatFullView, date),
+	full: (date?: LiteralUnion<'now'> | number) =>
+		convertDate(formatFullView, date),
 };
 
 export {default as twColors} from 'tailwindcss/colors';
@@ -153,4 +162,88 @@ export function mutateCallback(
 			hide?.();
 		},
 	} as UseTRPCMutationOptions<any, any, any>;
+}
+
+export function exportData<T extends object>(
+	data?: T[],
+	names?: [filename?: string, sheetName?: string],
+	header?: ObjKeyof<T>[],
+) {
+	if (!data) return;
+
+	const [filename = 'data', sheetName = 'Sheet 1'] = names ?? [];
+
+	const workbook = XLSX.utils.book_new();
+	workbook.SheetNames.push(sheetName);
+	workbook.Sheets[sheetName] = XLSX.utils.json_to_sheet(data, {header});
+	XLSX.writeFile(workbook, `${filename}.xlsx`);
+}
+
+export function modalTypeParser(type?: ModalTypeSelect, pageName = '') {
+	const isAdd = type === 'add';
+	const isEdit = type === 'edit';
+	const isPreview = type === 'preview';
+	const isDelete = type === 'delete';
+	const isSelect = type === 'select';
+	const isOther = type === 'other';
+	const isPreviewEdit = isEdit || isPreview;
+
+	return {
+		isEdit,
+		isPreview,
+		isAdd,
+		isOther,
+		isDelete,
+		isSelect,
+		isPreviewEdit,
+		get modalTitle() {
+			switch (type) {
+				case 'add':
+					return `Tambah ${pageName}`;
+				case 'edit':
+					return `Ubah ${pageName}`;
+				case 'preview':
+					return `Detail ${pageName}`;
+				case 'delete':
+					return `Hapus ${pageName}`;
+				default:
+					return '';
+			}
+		},
+	};
+}
+
+export function nullUseQuery() {
+	type Ret = UseTRPCQueryResult<{}[], unknown>;
+
+	return {
+		data: [] as {}[],
+		refetch: noopVoid,
+		isFetching: false,
+		isFetched: true,
+	} as Ret;
+}
+
+export function nullRenderItem() {
+	return {};
+}
+
+export function renderItemAsIs<T extends {}>(item: T) {
+	const obj = Object.entries(item);
+
+	return obj.reduce<MyObject<unknown>>((ret, [key, value]) => {
+		return {...ret, [key.ucwords()]: value};
+	}, {});
+}
+
+export function transformIds(dataObj?: MyObject<undefined | boolean>) {
+	const selectedIds = Object.entries(dataObj ?? {}).reduce<string[]>(
+		(ret, [id, val]) => {
+			if (val) ret.push(id);
+			return ret;
+		},
+		[],
+	);
+
+	return selectedIds;
 }
