@@ -9,7 +9,7 @@ import 'global-methods';
 import 'moment/locale/id';
 import './globals.css';
 
-import {ReactElement, ReactNode, StrictMode} from 'react';
+import {ReactElement, ReactNode, StrictMode, Suspense} from 'react';
 
 import {CacheProvider, EmotionCache} from '@emotion/react';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -61,36 +61,38 @@ function App(props: AppProps) {
 	Router.events.on('routeChangeComplete', nProgress.done);
 
 	return (
-		<StrictMode>
-			<CacheProvider value={emotionCache}>
-				<Head>
-					<title>{AppDefault.title}</title>
-					<meta
-						name="viewport"
-						content="width=device-width, initial-scale=1, shrink-to-fit=no"
-					/>
-				</Head>
-				<RecoilRoot>
-					<SidebarProvider>
-						<ThemeProvider>
-							<LocalizationProvider dateAdapter={AdapterDateFns}>
-								<CssBaseline />
-								<QueryClientProvider client={queryClient}>
-									{!isProd && <ReactQueryDevtools />}
-									<SessionProvider
-										session={session}
-										refetchInterval={30000}
-										refetchWhenOffline={false}
-										refetchOnWindowFocus={false}>
-										{getLayout(<Component {...pageProps} />)}
-									</SessionProvider>
-								</QueryClientProvider>
-							</LocalizationProvider>
-						</ThemeProvider>
-					</SidebarProvider>
-				</RecoilRoot>
-			</CacheProvider>
-		</StrictMode>
+		<Suspense>
+			<StrictMode>
+				<CacheProvider value={emotionCache}>
+					<Head>
+						<title>{AppDefault.title}</title>
+						<meta
+							name="viewport"
+							content="width=device-width, initial-scale=1, shrink-to-fit=no"
+						/>
+					</Head>
+					<RecoilRoot>
+						<SidebarProvider>
+							<ThemeProvider>
+								<LocalizationProvider dateAdapter={AdapterDateFns}>
+									<CssBaseline />
+									<QueryClientProvider client={queryClient}>
+										{!isProd && <ReactQueryDevtools />}
+										<SessionProvider
+											session={session}
+											refetchInterval={30000}
+											refetchWhenOffline={false}
+											refetchOnWindowFocus={false}>
+											{getLayout(<Component {...pageProps} />)}
+										</SessionProvider>
+									</QueryClientProvider>
+								</LocalizationProvider>
+							</ThemeProvider>
+						</SidebarProvider>
+					</RecoilRoot>
+				</CacheProvider>
+			</StrictMode>
+		</Suspense>
 	);
 }
 

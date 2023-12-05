@@ -1,7 +1,7 @@
-import {tableFormValue, tCustomerUpsert} from '@appTypes/app.zod';
+import {tableFormValue, TCustomer, tCustomerUpsert} from '@appTypes/app.zod';
 import {dCust, ORM} from '@db';
 import {checkCredentialV2, pagingResult} from '@server';
-import {PError, PSuccess} from '@server-utils';
+import {PError, PSuccess, sqlWhereLike} from '@server-utils';
 import {procedure, router} from '@trpc';
 import {generateId} from '@utils';
 
@@ -14,6 +14,7 @@ export default function customerRouters() {
 				const {count, rows} = await dCust.findAndCountAll({
 					limit,
 					offset: (page - 1) * limit,
+					where: sqlWhereLike<TCustomer>(['name', 'nik'], search),
 				});
 
 				return pagingResult(

@@ -4,11 +4,19 @@ import {Primitive} from 'zod';
 
 import {TDateFilter} from './zod';
 
-export function groupPages<T extends {}>(searchKey: L1<T>): any {
+type L1<T extends {}> = Path<ObjectNonArray<T>>;
+type L2<T extends {}> = `$${Path<ObjectNonArray<T>>}$`;
+type L<T extends {}> = L1<T> | L2<T>;
+type U<T extends {}> = ['or' | 'and', O<T>];
+type O<T extends {}> = Partial<
+	Record<L<T>, Primitive | WhereAttributeHashValue<any>>
+>;
+
+export function sqlGroup<T extends {}>(searchKey: L1<T>): any {
 	return searchKey;
 }
 
-export function orderPages<T extends {}>(
+export function sqlOrder<T extends {}>(
 	searchKey: Partial<Record<L1<T>, boolean>>,
 ): any {
 	return entries(searchKey).map(([key, value]) => {
@@ -16,32 +24,7 @@ export function orderPages<T extends {}>(
 	});
 }
 
-export function wherePages(
-	searchKey?: string | string[],
-	search?: string,
-): any {
-	if (!searchKey || !search) return undefined;
-
-	if (!Array.isArray(searchKey)) {
-		return {
-			[searchKey]: {
-				[Op.iLike]: `%${search}%`,
-			},
-		};
-	}
-
-	return {
-		[Op.or]: searchKey.map(key => {
-			return {
-				[key]: {
-					[Op.iLike]: `%${search}%`,
-				},
-			};
-		}),
-	};
-}
-
-export function wherePagesV2<T extends {}>(
+export function sqlWhereLike<T extends {}>(
 	searchKey: L<T>[],
 	search?: string | WhereAttributeHashValue<any>,
 	like = true,
@@ -55,9 +38,9 @@ export function wherePagesV2<T extends {}>(
 	};
 }
 
-export function wherePagesV3<T extends {}>(
+export function sqlWhereOrAnd<T extends {}>(
 	searchKey: O<T>,
-	operator: keyof typeof Op = 'and',
+	operator: 'or' | 'and' = 'and',
 ): any {
 	return {
 		[Op[operator]]: Object.entries(searchKey).map(keys => {
@@ -67,17 +50,7 @@ export function wherePagesV3<T extends {}>(
 	};
 }
 
-type L1<T extends {}> = Path<ObjectNonArray<T>>;
-type L2<T extends {}> = `$${Path<ObjectNonArray<T>>}$`;
-type L<T extends {}> = L1<T> | L2<T>;
-type U<T extends {}> = ['or' | 'and', O<T>];
-type O<T extends {}> = Partial<
-	Record<L<T>, Primitive | WhereAttributeHashValue<any>>
->;
-
-export function wherePagesV4<T extends {}>(
-	...searchKeys: (U<T> | O<T>)[]
-): any {
+export function sqlWhere<T extends {}>(...searchKeys: (U<T> | O<T>)[]): any {
 	return searchKeys.reduce((ret, asd) => {
 		const isArray = Array.isArray(asd);
 		const [op, searchKey]: U<T> = isArray ? asd : ['and', asd];
@@ -91,7 +64,7 @@ export function wherePagesV4<T extends {}>(
 	}, {});
 }
 
-export function whereDateFilter<T extends {}>(
+export function sqlWhereDate<T extends {}>(
 	field: LiteralUnion<L<T>>,
 	{filterFrom, filterTo}: Partial<TDateFilter>,
 ): any {
