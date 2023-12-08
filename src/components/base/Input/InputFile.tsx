@@ -5,11 +5,13 @@ import {
 	ControlledComponentProps,
 	withReactFormController,
 } from '@formController';
-import {toBase64} from '@utils';
+import {classNames, toBase64} from '@utils';
 
 export type InputFileProps = {
 	accept?: HTMLInputElement['accept'];
 	label?: string;
+	btnClassName?: string;
+	imgClassName?: string;
 };
 
 export const InputFile = withReactFormController(InputFileComponent);
@@ -20,15 +22,22 @@ function InputFileComponent<F extends FieldValues>(
 		'leftAcc' | 'rightAcc'
 	>,
 ) {
-	const {controller, className, label = 'Upload File', accept} = props;
+	const {
+		controller,
+		className,
+		btnClassName,
+		imgClassName,
+		label = 'Upload File',
+		accept,
+	} = props;
 
 	const {
 		field: {onChange, value: imgSource},
 	} = controller;
 
 	return (
-		<div className="flex items-center gap-2">
-			<Button className={className} component="label">
+		<div className={classNames('flex items-center gap-2', className)}>
+			<Button className={btnClassName} component="label">
 				{label}
 				<input
 					hidden
@@ -49,8 +58,8 @@ function InputFileComponent<F extends FieldValues>(
 			</Button>
 			{imgSource && (
 				<ImageWithPreview
-					className="w-20 max-h-20 overflow-hidden"
 					src={imgSource}
+					className={classNames('w-20 max-h-20 overflow-hidden', imgClassName)}
 				/>
 			)}
 		</div>

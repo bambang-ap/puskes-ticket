@@ -12,8 +12,7 @@ export const sHeaderTitle = new CreateSignal('');
 
 export const sListMenu = new CreateSignalArray<TMenu>([
 	{title: 'Overview', path: '/admin', icon: 'faHome'},
-	{title: 'Product', path: '/admin/products', icon: 'faGlassWater'},
-	{title: 'Category', path: '/admin/categories', icon: 'faList'},
-	{title: 'Payment', path: '/admin/payment', icon: 'faWallet'},
-	{title: 'Promo', path: '/admin/promo', icon: 'faTags'},
+	{title: 'Customer', path: '/admin/customer', icon: 'faUserAstronaut'},
+	{title: 'User', path: '/admin/user', icon: 'faUser'},
+	{title: 'Gallery', path: '/admin/gallery', icon: 'faImage'},
 ]);

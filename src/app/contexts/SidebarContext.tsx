@@ -32,7 +32,9 @@ export function SidebarProvider({children}: Props) {
 		setSidebarToggle(false);
 	};
 
-	function handleResize() {
+	function handleResize(hasWindow = false) {
+		if (!hasWindow) return;
+
 		const {[SidebarCollapseOn]: width} = theme.breakpoints.values;
 		if (window.innerWidth <= width) {
 			setSidebarToggle(false);
@@ -44,9 +46,14 @@ export function SidebarProvider({children}: Props) {
 	}
 
 	useLayoutEffect(() => {
-		handleResize();
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		const hasWindow = typeof window !== undefined;
+		handleResize(hasWindow);
+		if (hasWindow)
+			window.addEventListener('resize', () => handleResize(hasWindow));
+		return () => {
+			if (hasWindow)
+				window.removeEventListener('resize', () => handleResize(hasWindow));
+		};
 	}, []);
 
 	return (
