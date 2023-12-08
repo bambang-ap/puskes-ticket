@@ -1,5 +1,6 @@
 import {z} from 'zod';
 
+import {IconName} from '@components';
 import {decimalRegex, defaultLimit} from '@constants';
 
 export * from './type.zod';
@@ -45,3 +46,10 @@ export const uModalTypeSelect = z.union([
 	uModalTypePreview,
 	z.literal('select'),
 ]);
+
+export type TMenu = z.infer<typeof tMenu>;
+export const tMenu = z.object({
+	title: z.string(),
+	path: z.string(),
+	icon: z.string().transform(t => t as IconName),
+});

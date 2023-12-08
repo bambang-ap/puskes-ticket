@@ -5,12 +5,11 @@ import {useContext} from 'react';
 
 import {List, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
 import {useRouter} from 'next/router';
-import {useRecoilValue} from 'recoil';
 
 import {SidebarContext} from '@app/contexts/SidebarContext';
 import {TMenu} from '@appTypes/app.zod';
 import {Icon} from '@components';
-import {atomIsMobile, atomListMenu} from '@recoil/atoms';
+import {sIsMobile, sListMenu} from '@signal';
 import {classNames} from '@utils';
 
 // function SubMenu({title, path, icon}: TMenu) {
@@ -41,7 +40,7 @@ import {classNames} from '@utils';
 // }
 
 function Menu(menu: TMenu) {
-	const isMobile = useRecoilValue(atomIsMobile);
+	const isMobile = sIsMobile.value;
 
 	const {push, pathname} = useRouter();
 
@@ -85,11 +84,9 @@ function RenderMenuList({data}: {data?: TMenu[]}) {
 }
 
 function SidebarMenu() {
-	const listMenu = useRecoilValue(atomListMenu);
-
 	return (
 		<List component="div">
-			<RenderMenuList data={listMenu} />
+			<RenderMenuList data={sListMenu.value} />
 		</List>
 	);
 }

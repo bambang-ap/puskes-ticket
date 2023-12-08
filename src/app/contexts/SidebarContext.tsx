@@ -1,10 +1,9 @@
 import {createContext, ReactNode, useLayoutEffect, useState} from 'react';
 
 import {useTheme} from '@mui/material';
-import {useSetRecoilState} from 'recoil';
 
 import {SidebarCollapseOn} from '@constants';
-import {atomIsMobile} from '@recoil/atoms';
+import {sIsMobile} from '@signal';
 type SidebarContext = {
 	sidebarToggle: boolean;
 	toggleSidebar: () => void;
@@ -22,7 +21,6 @@ export const SidebarContext = createContext<SidebarContext>(
 
 export function SidebarProvider({children}: Props) {
 	const theme = useTheme();
-	const setIsMobile = useSetRecoilState(atomIsMobile);
 
 	const [sidebarToggle, setSidebarToggle] = useState(true);
 
@@ -38,10 +36,10 @@ export function SidebarProvider({children}: Props) {
 		const {[SidebarCollapseOn]: width} = theme.breakpoints.values;
 		if (window.innerWidth <= width) {
 			setSidebarToggle(false);
-			setIsMobile(true);
+			sIsMobile.set(true);
 		} else {
 			setSidebarToggle(true);
-			setIsMobile(false);
+			sIsMobile.set(false);
 		}
 	}
 

@@ -1,9 +1,7 @@
 import {useEffect} from 'react';
 
 import {Pagination} from '@mui/material';
-import {filterExpand} from '@signal';
 import {useForm, UseFormReturn} from 'react-hook-form';
-import {useRecoilValue} from 'recoil';
 
 import {PagingResult} from '@appTypes/app.type';
 import {TableFormValue} from '@appTypes/app.zod';
@@ -17,7 +15,7 @@ import {
 	TableProps,
 } from '@components';
 import {dataPerPageSelection} from '@constants';
-import {atomIsMobile} from '@recoil/atoms';
+import {sFilterExpand, sIsMobile} from '@signal';
 import {classNames} from '@utils';
 
 export type TableFilterProps<T> = Omit<
@@ -37,8 +35,8 @@ export function TableFilter<T>({
 	disableSearch,
 	...props
 }: TableFilterProps<T>) {
-	const isMobile = useRecoilValue(atomIsMobile);
-	const expanded = filterExpand.value;
+	const isMobile = sIsMobile.value;
+	const expanded = sFilterExpand.value;
 
 	const {control, watch, reset: resetForm} = form;
 	const {rows = [], totalPage: pageCount = 1, page = 1} = data ?? {};
@@ -125,7 +123,7 @@ export function TableFilter<T>({
 						})}>
 						{topComponent}
 						{isMobile && (
-							<Button onClick={() => filterExpand.toggle()}>
+							<Button onClick={() => sFilterExpand.toggle()}>
 								<Icon name="faFilter" />
 								<Icon name={expanded ? 'faChevronUp' : 'faChevronDown'} />
 							</Button>

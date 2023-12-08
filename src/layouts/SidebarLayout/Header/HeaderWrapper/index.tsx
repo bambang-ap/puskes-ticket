@@ -12,12 +12,11 @@ import {
 	useTheme,
 } from '@mui/material';
 import Head from 'next/head';
-import {useRecoilState} from 'recoil';
 
 import {SidebarContext} from '@app/contexts/SidebarContext';
 import {Text} from '@components';
 import {manifest, SidebarCollapseOn} from '@constants';
-import {atomHeaderTitle} from '@recoil/atoms';
+import {sHeaderTitle} from '@signal';
 import {classNames} from '@utils';
 
 const HeaderWrapper = styled(Box)(({theme}) => {
@@ -43,7 +42,7 @@ const HeaderWrapper = styled(Box)(({theme}) => {
 
 function Header() {
 	const theme = useTheme();
-	const [title] = useRecoilState(atomHeaderTitle);
+	const title = sHeaderTitle.value;
 
 	const {sidebarToggle, toggleSidebar} = useContext(SidebarContext);
 

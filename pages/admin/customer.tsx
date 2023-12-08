@@ -18,7 +18,9 @@ export default function Customer() {
 
 	const {control, reset, watch} = useForm<FormValue>();
 
-	const {modalTitle, dataForm} = formParser(watch(), {pageName: 'Customer'});
+	const {modalTitle /* dataForm */} = formParser(watch(), {
+		pageName: 'Customer',
+	});
 
 	const {component} = useTableFilterComponentV2({
 		control,

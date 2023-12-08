@@ -24,7 +24,6 @@ import Router from 'next/router';
 import {ReactQueryDevtools} from 'node_modules/@tanstack/react-query-devtools/build/lib/devtools';
 import nProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import {RecoilRoot} from 'recoil';
 
 import {SidebarProvider} from '@app/contexts/SidebarContext';
 import ThemeProvider from '@app/theme/ThemeProvider';
@@ -71,25 +70,24 @@ function App(props: AppProps) {
 							content="width=device-width, initial-scale=1, shrink-to-fit=no"
 						/>
 					</Head>
-					<RecoilRoot>
-						<SidebarProvider>
-							<ThemeProvider>
-								<LocalizationProvider dateAdapter={AdapterDateFns}>
-									<CssBaseline />
-									<QueryClientProvider client={queryClient}>
-										{!isProd && <ReactQueryDevtools />}
-										<SessionProvider
-											session={session}
-											refetchInterval={30000}
-											refetchWhenOffline={false}
-											refetchOnWindowFocus={false}>
-											{getLayout(<Component {...pageProps} />)}
-										</SessionProvider>
-									</QueryClientProvider>
-								</LocalizationProvider>
-							</ThemeProvider>
-						</SidebarProvider>
-					</RecoilRoot>
+
+					<SidebarProvider>
+						<ThemeProvider>
+							<LocalizationProvider dateAdapter={AdapterDateFns}>
+								<CssBaseline />
+								<QueryClientProvider client={queryClient}>
+									{!isProd && <ReactQueryDevtools />}
+									<SessionProvider
+										session={session}
+										refetchInterval={30000}
+										refetchWhenOffline={false}
+										refetchOnWindowFocus={false}>
+										{getLayout(<Component {...pageProps} />)}
+									</SessionProvider>
+								</QueryClientProvider>
+							</LocalizationProvider>
+						</ThemeProvider>
+					</SidebarProvider>
 				</CacheProvider>
 			</StrictMode>
 		</Suspense>

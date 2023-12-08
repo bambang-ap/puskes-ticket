@@ -8,7 +8,7 @@ import {
 } from '@formController';
 import {classNames} from '@utils';
 
-type IconName = Exclude<keyof typeof svgIcon, 'prefix' | 'fas'>;
+export type IconName = Exclude<keyof typeof svgIcon, 'prefix' | 'fas'>;
 
 export type IconProps = {
 	/**

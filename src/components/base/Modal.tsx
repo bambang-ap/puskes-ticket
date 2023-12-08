@@ -7,9 +7,8 @@ import {
 	DialogProps,
 	DialogTitle,
 } from '@mui/material';
-import {useRecoilValue} from 'recoil';
 
-import {atomIsMobile} from '@recoil/atoms';
+import {sIsMobile} from '@signal';
 import {classNames} from '@utils';
 
 import {Icon} from './Icon';
@@ -46,7 +45,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(function ModalComponent(
 		visible: initVisible = false,
 		size: modalSize,
 	} = props;
-	const isMobile = useRecoilValue(atomIsMobile);
+	const isMobile = sIsMobile.value;
 
 	const [visible, setVisible] = useState(initVisible);
 

@@ -1,7 +1,6 @@
 {
 	"cSpell.words": [
 		"Cust",
-		"Penjualan",
 		"upsert"
 	],
 	"[javascript]": {
@@ -20,7 +19,7 @@
 		"javascriptreact"
 	],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,

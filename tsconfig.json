@@ -106,9 +106,6 @@
 			"@utils/*": [
 				"./src/utils/*"
 			],
-			"@recoil/*": [
-				"./src/recoil/*"
-			]
 		}
 	},
 	"exclude": [
