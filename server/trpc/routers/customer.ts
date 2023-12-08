@@ -1,4 +1,4 @@
-import {tableFormValue, TCustomer, tCustomerUpsert} from '@appTypes/app.zod';
+import {tableFormValue, TCustomer, tCustomerCreate} from '@appTypes/app.zod';
 import {dCust, ORM} from '@db';
 import {checkCredentialV2, pagingResult} from '@server';
 import {PError, PSuccess, sqlWhereLike} from '@server-utils';
@@ -29,7 +29,7 @@ export default function customerRouters() {
 			});
 		}),
 
-		create: procedure.input(tCustomerUpsert).mutation(async ({input}) => {
+		create: procedure.input(tCustomerCreate).mutation(async ({input}) => {
 			const transaction = await ORM.transaction();
 
 			try {

@@ -49,8 +49,19 @@ export const tCustomer = zId.extend({
 	...tState.shape,
 });
 
-export type TCustomerUpsert = z.infer<typeof tCustomerUpsert>;
-export const tCustomerUpsert = tCustomer.partial({
+export type TCustomerCreate = z.infer<typeof tCustomerCreate>;
+export const tCustomerCreate = tCustomer.partial({
 	id: true,
 	registerNumber: true,
 });
+
+export type TGallery = z.infer<typeof tGallery>;
+export const tGallery = zId.extend({
+	image: z.string(),
+	index: z.number().optional(),
+});
+
+export type TGalleryUpsert = z.infer<typeof tGalleryUpsert>;
+export const tGalleryUpsert = tGallery.partial({id: true, index: true});
+
+export const tGalleryResolver = zId.or(tGalleryUpsert);

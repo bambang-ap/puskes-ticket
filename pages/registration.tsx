@@ -4,7 +4,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 
 import {StateSelection, useStateData} from '@appComponent/StateSelection';
-import {TCustomer, TCustomerUpsert, tCustomerUpsert} from '@appTypes/app.zod';
+import {TCustomer, TCustomerCreate, tCustomerCreate} from '@appTypes/app.zod';
 import {
 	BorderTd,
 	Button,
@@ -28,8 +28,8 @@ export default function Registration() {
 	const {component, mutateOpts} = useLoader();
 	const {mutateAsync: mutate} = trpc.customer.create.useMutation(mutateOpts);
 	const {control, setValue, resetField, watch, handleSubmit, clearErrors} =
-		useForm<TCustomerUpsert>({
-			resolver: zodResolver(tCustomerUpsert),
+		useForm<TCustomerCreate>({
+			resolver: zodResolver(tCustomerCreate),
 		});
 
 	const {nik, gender} = watch();
